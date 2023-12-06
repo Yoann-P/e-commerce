@@ -66,18 +66,54 @@
 			</div>
 		</div>
 	</div>
-	<div class="section small_pt pb_70">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6">
-					<div class="heading_s1 text-center">
-						<h2>Exclusive Products</h2>
+	<div  class="section small_pt pb_70">
+		<div  class="container">
+			<div  class="row justify-content-center">
+				<div  class="col-md-6">
+					<div  class="heading_s1 text-center">
+						<h2 >Exclusive Products</h2>
 					</div>
 				</div>
 			</div>
-
+			<div  class="row">
+				<div  class="col-12">
+					<div  class="tab-style1">
+						<ul  role="tablist" class="nav nav-tabs justify-content-center">
+							<li  class="nav-item"><a 
+									id="arrival-tab" data-bs-toggle="tab" href="#arrival" role="tab"
+									aria-controls="arrival" aria-selected="true" class="nav-link active">New
+									Arrival</a></li>
+							<li  class="nav-item"><a 
+									id="sellers-tab" data-bs-toggle="tab" href="#sellers" role="tab"
+									aria-controls="sellers" aria-selected="false" class="nav-link">Best Sellers</a>
+							</li>
+							
+						</ul>
+					</div>
+					<div class="tab-content">
+						<div id="arrival" role="tabpanel" aria-labelledby="arrival-tab"
+							class="tab-pane fade show active">
+							<div class="row shop_container">
+								{%for product in productsNewArrival%}
+								{%include"product/display_product.html.twig"%}
+								{%endfor%}
+							</div>
+						</div>
+						<div id="sellers" role="tabpanel" aria-labelledby="sellers-tab" class="tab-pane fade">
+							<div class="row shop_container">
+								{%for product in productsBestSeller%}
+								{%include"product/display_product.html.twig"%}
+								{%endfor%}
+							</div>
+						</div>
+ 
+ 
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+	
 </div>
 </div>
 
