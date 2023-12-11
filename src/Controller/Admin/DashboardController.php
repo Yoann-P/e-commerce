@@ -9,6 +9,7 @@ use App\Entity\Page;
 use App\Entity\Product;
 use App\Entity\Setting;
 use App\Entity\Sliders;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -57,5 +58,14 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Sliders', 'fas fa-image', Sliders::class);
         yield MenuItem::linkToCrud('Collections', 'fas fa-tshirt', Collections::class);
         yield MenuItem::linkToCrud('Settings', 'fas fa-gear', Setting::class);   
+    }
+
+    public function configureCrud(): Crud
+    {
+        return Crud::new()
+            ->setFormThemes([
+                '@EasyAdmin/crud/form_theme.html.twig',
+                '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+            ]);
     }
 }

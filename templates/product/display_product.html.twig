@@ -1,7 +1,7 @@
 <div class="col-lg-3 col-md-4 col-6">
   <div class="product">
     <div class="product_img">
-      <a href="shop-product-detail.html"
+      <a href="/product/{{ product.slug }}"
         ><img
           alt="product_img1"
           src="/assets/images/products/{{ product.imageUrls[0] }}"
@@ -34,7 +34,7 @@
     </div>
     <div class="product_info">
       <h6 class="product_title">
-        <a href="/product/bikini-unicolore-ctel-shop">
+        <a href="/product/{{ product.slug }}">
           {{ product.name }}
         </a>
       </h6>
@@ -47,6 +47,7 @@
           <span
             >{{((product.regularPrice- product.soldePrice)*100/product.regularPrice)
                         |number_format(2,'.',',')
+
 
             }}% Off</span
           >

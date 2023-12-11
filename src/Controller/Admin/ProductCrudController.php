@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -15,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -26,6 +28,7 @@ class ProductCrudController extends AbstractCrudController
         return Product::class;
     }
 
+    
     public function configureActions(Actions $actions): Actions{
         return $actions 
         ->add(Crud::PAGE_EDIT, Action::INDEX)
@@ -34,7 +37,7 @@ class ProductCrudController extends AbstractCrudController
         ;
     }
 
-    
+   
     public function configureFields(string $pageName): iterable
     {
         
@@ -43,7 +46,8 @@ class ProductCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
             SlugField::new('slug')->setTargetFieldNAme('name')->hideOnIndex(),
-            TextEditorField::new('description'),
+            TextEditorField::new('description')->setFormType(CKEditorType::class),
+            AssociationField::new('relatedProducts')->hideOnIndex(), 
             ImageField::new('imageUrls')
             ->setFormTypeOptions([
               "multiple" => true,
@@ -57,7 +61,7 @@ class ProductCrudController extends AbstractCrudController
             MoneyField::new('solde_price')->setCurrency('EUR'),
             MoneyField::new('regular_price')->setCurrency('EUR'),
             IntegerField::new('stock'),
-            AssociationField::new('categories'),   
+            AssociationField::new('categories')->hideOnIndex(),   
             BooleanField::new('isBestSeller'),
             BooleanField::new('isNewArrival'),
             
