@@ -9,7 +9,7 @@
       <div class="product_action_box">
         <ul class="list_none pr_action_btn">
           <li class="add-to-cart">
-            <a href="#">
+            <a href="/cart/add/{{ product.id }}">
               <i class="icon-basket-loaded"></i>
               Add To Cart
             </a>
@@ -47,6 +47,7 @@
           <span
             >{{((product.regularPrice- product.soldePrice)*100/product.regularPrice)
                         |number_format(2,'.',',')
+
 
 
             }}% Off</span

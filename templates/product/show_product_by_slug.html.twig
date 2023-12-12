@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %} {% block title %}E-commerce | Home page {%
+{% extends 'base.html.twig' %} {% block title %}E-commerce | Product-Page {%
 endblock %} {% block body %}
 <div class="main_content">
   <div class="section">
@@ -83,6 +83,8 @@ endblock %} {% block body %}
 
 
 
+
+
                     }}% Off</span
                   >
                 </div>
@@ -94,7 +96,7 @@ endblock %} {% block body %}
                 <span class="rating_num">(21)</span>
               </div>
               <div class="pr_desc">
-                <p>{{ product.description }}</p>
+                <p>{{ product.description | raw }}</p>
               </div>
               <div class="product_sort_info">
                 <ul>
@@ -278,7 +280,7 @@ endblock %} {% block body %}
                 aria-labelledby="Description-tab"
                 class="tab-pane fade show active"
               >
-                {{ product.description }}
+                {{ product.description | raw }}
               </div>
               <div
                 id="Additional-info"
@@ -286,7 +288,7 @@ endblock %} {% block body %}
                 aria-labelledby="Additional-info-tab"
                 class="tab-pane fade"
               >
-                {{ product.description }}
+                {{ product.description | raw }}
               </div>
               <div
                 id="Reviews"

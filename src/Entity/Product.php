@@ -23,7 +23,7 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 2550)]
     private ?string $description = null;
 
     #[ORM\Column (nullable: true)]
