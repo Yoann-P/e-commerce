@@ -65,19 +65,31 @@ class CartService
         $result = [
             'items' => [],
             'sub_total' => 0,
+            'cart_count' => 0,
         ];
-    
+        $sub_total = 0;
         foreach ($cart as $productId => $quantity) {
             $product = $this->productRepo->find($productId);
-            if ($product) {
-                $current_sub_total = $product->getSoldePrice() * $quantity;
+            if($product){
+                $current_sub_total = $product->getSoldePrice()*$quantity;
+                $sub_total += $current_sub_total;
                 $result['items'][] = [
-                    'product' => $product,
+                    'product' => [
+                        'id'=>$product->getId(),
+                        'name'=>$product->getName(),
+                        'slug'=>$product->getSlug(),
+                        'imageUrls'=>$product->getImageUrls(),
+                        'soldePrice'=>$product->getSoldePrice(),
+                        'regularPrice'=>$product->getRegularPrice(),
+                    ],
                     'quantity' => $quantity,
                     'sub_total' => $current_sub_total,
                 ];
-                $result['sub_total'] += $current_sub_total; // Mise à jour du sous-total global
-            } else {
+                $result['sub_total'] = $sub_total;
+                $result['cart_count'] += $quantity;
+                
+
+            }else{
                 unset($cart[$productId]);
                 $this->updateCart($cart);
             }

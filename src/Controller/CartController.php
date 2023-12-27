@@ -19,9 +19,14 @@ class CartController extends AbstractController
     public function index(): Response
     {
         $cart= $this->cartService->getCartDetails();
+        $cart_json = json_encode($cart);
+
+        // return $this->json($cart);
+
         return $this->render('cart/index.html.twig', [
             'controller_name' => 'CartController',
-            'cart' => $cart 
+            'cart' => $cart, 
+            'cart_json' => $cart_json
         ]);
     }
 
@@ -31,14 +36,23 @@ class CartController extends AbstractController
         $this->cartService->addToCart($productId, $count);
         // dd($this->cartService->getCart());
         // dd($this->cartService->getCartDetails());
-
-        return $this->redirectToRoute("app_cart");
+        $cart= $this->cartService->getCartDetails();
+        return $this->json($cart);
     }
 
     #[Route('/cart/remove/{productId}/{count}', name: 'app_remove_to_cart')]
     public function removeToCart(string $productId, $count=1): Response
     {
         $this->cartService->removeToCart($productId, $count);
-        return $this->redirectToRoute("app_cart");
+        $cart= $this->cartService->getCartDetails();
+        return $this->json($cart);
+    }
+
+    #[Route('/cart/get/', name: 'app_get_cart')]
+    public function getCart(): Response
+    {
+        
+        $cart= $this->cartService->getCartDetails();
+        return $this->json($cart);
     }
 }

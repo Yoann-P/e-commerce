@@ -90,6 +90,13 @@ endblock %} {% block body %}
 
 
 
+
+
+
+
+
+
+
                     }}% Off</span
                   >
                 </div>
@@ -163,11 +170,15 @@ endblock %} {% block body %}
                 </div>
               </div>
               <div class="cart_btn">
-                <button type="button" class="btn btn-fill-out btn-addtocart">
+                <a
+                  href="/cart/add/{{ product.id }}/1"
+                  type="button"
+                  class="btn btn-fill-out btn-addtocart"
+                >
                   <i class="icon-basket-loaded"></i>
                   Add to cart
-                </button>
-                <button type="button" class="btn btn-fill-out btn-addtocart">
+                </a>
+                <button type="button" class="btn btn-fill-out">
                   <i class="icon-basket-loaded"></i>
                   Pay Now
                 </button>

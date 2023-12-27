@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %} {% block title %}Jstore | Shopping Cart {%
 endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
 {'page_name': 'Cart'} %}
-<div class="main_content">
+<div class="main_content" data-cart="{{ cart_json }}">
   <div class="section">
     <div class="container">
       <div class="row">
@@ -18,59 +18,7 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
                   <th class="product-remove">Remove</th>
                 </tr>
               </thead>
-              <tbody>
-                {% for item in cart.items %}
-                <tr>
-                  <td class="product-thumbnail">
-                    <a
-                      ><img
-                        width="50"
-                        alt="product1"
-                        src="/assets/images/products/{{
-                          item.product.imageUrls[0]
-                        }}"
-                    /></a>
-                    <!-- {{ dump(item) }} -->
-                  </td>
-                  <td data-title="Product" class="product-name">
-                    <a>{{ item.product.name }}</a>
-                  </td>
-                  <td data-title="Price" class="product-price">
-                    {{ (item.product.soldePrice/100) |format_currency('EUR') }}
-                  </td>
-                  <td data-title="Quantity" class="product-quantity">
-                    <div class="quantity">
-                      <a href="/cart/remove/{{ item.product.id }}/1">
-                        <input type="button" value="-" class="minus" />
-                      </a>
-                      <input
-                        type="text"
-                        name="quantity"
-                        value="{{ item.quantity }}"
-                        title="Qty"
-                        size="4"
-                        class="qty"
-                      />
-                      <a href="/cart/add/{{ item.product.id }}/1">
-                        <input type="button" value="+" class="plus" />
-                      </a>
-                    </div>
-                  </td>
-                  <td data-title="Total" class="product-subtotal">
-                    {{ (item.sub_total/100)  |format_currency('EUR')  }}
-                  </td>
-                  <td data-title="Remove" class="product-remove">
-                    <a
-                      href="/cart/remove/{{ item.product.id }}/{{
-                        item.quantity
-                      }}"
-                    >
-                      <i class="ti-close"></i>
-                    </a>
-                  </td>
-                </tr>
-                {% endfor%}
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
         </div>
@@ -96,9 +44,7 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
                 <tbody>
                   <tr>
                     <td class="cart_total_label">Cart Subtotal</td>
-                    <td class="cart_total_amount">
-                      {{ (cart.sub_total/100)   |format_currency('EUR') }}
-                    </td>
+                    <td class="cart_total_amount"></td>
                   </tr>
                   <tr>
                     <td class="cart_total_label">Shipping</td>
@@ -107,9 +53,7 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
                   <tr>
                     <td class="cart_total_label">Total</td>
                     <td class="cart_total_amount">
-                      <strong
-                        >{{ (cart.sub_total/100)   |format_currency('EUR') }}</strong
-                      >
+                      <strong></strong>
                     </td>
                   </tr>
                 </tbody>
