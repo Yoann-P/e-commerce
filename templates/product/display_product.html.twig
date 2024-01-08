@@ -27,7 +27,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="/wishlist/add/{{ product.id }}" class="add-to-wishlist">
               <i class="icon-heart"></i>
             </a>
           </li>
@@ -49,20 +49,6 @@
           <span
             >{{((product.regularPrice- product.soldePrice)*100/product.regularPrice)
                         |number_format(2,'.',',')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             }}% Off</span
           >

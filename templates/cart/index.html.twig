@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %} {% block title %}Jstore | Shopping Cart {%
+{% extends 'base.html.twig' %} {% block title %}E-commerce | Shopping Cart {%
 endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
 {'page_name': 'Cart'} %}
 <!-- {{ dump(cart) }}
 {{ dump(cart_json) }} -->
-<div class="cart_content" data-cart="{{ cart_json }}">
+<div class="main_content cart_content" data-cart="{{ cart_json }}">
   <div class="section">
     <div class="container">
       <div class="row">
