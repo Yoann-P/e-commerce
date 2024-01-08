@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %} {% block title %}Jstore | Shopping Cart {%
 endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
 {'page_name': 'Cart'} %}
-<div class="main_content" data-cart="{{ cart_json }}">
+<!-- {{ dump(cart) }}
+{{ dump(cart_json) }} -->
+<div class="cart_content" data-cart="{{ cart_json }}">
   <div class="section">
     <div class="container">
       <div class="row">
@@ -52,14 +54,16 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
                   </tr>
                   <tr>
                     <td class="cart_total_label">Total</td>
-                    <td class="cart_total_amount">
-                      <strong></strong>
-                    </td>
+                    <td class="cart_total_amount"><strong></strong></td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <a routerlink="/checkout" class="btn btn-fill-out" href="/checkout"
+            <a
+              routerlink="/checkout"
+              class="btn btn-fill-out"
+              ng-reflect-router-link="/checkout"
+              href="/checkout"
               >Proceed To CheckOut</a
             >
           </div>

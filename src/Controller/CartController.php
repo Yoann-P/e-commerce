@@ -3,25 +3,26 @@
 namespace App\Controller;
 
 use App\Services\CartService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
-    public function __construct(private CartService $cartService)
-    {
+    public function __construct(
+        private CartService $cartService,
+    ) {
         $this->cartService = $cartService;
     }
 
-
+    
     #[Route('/cart', name: 'app_cart')]
     public function index(): Response
     {
         $cart= $this->cartService->getCartDetails();
         $cart_json = json_encode($cart);
 
-        // return $this->json($cart);
+         //return $this->json($cart);
 
         return $this->render('cart/index.html.twig', [
             'controller_name' => 'CartController',
@@ -31,28 +32,29 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/add/{productId}/{count}', name: 'app_add_to_cart')]
-    public function addToCart(string $productId, $count=1): Response
+    public function addToCart(string $productId, $count = 1): Response
     {
-        $this->cartService->addToCart($productId, $count);
-        // dd($this->cartService->getCart());
-        // dd($this->cartService->getCartDetails());
-        $cart= $this->cartService->getCartDetails();
+        $this->cartService->addToCart($productId,$count);
+        $cart = $this->cartService->getCartDetails();
+        // dd($cart);
         return $this->json($cart);
+        
     }
-
     #[Route('/cart/remove/{productId}/{count}', name: 'app_remove_to_cart')]
-    public function removeToCart(string $productId, $count=1): Response
+    public function removeToCart(string $productId, $count = 1): Response
     {
-        $this->cartService->removeToCart($productId, $count);
-        $cart= $this->cartService->getCartDetails();
-        return $this->json($cart);
-    }
+        $this->cartService->removeToCart($productId,$count);
+        $cart = $this->cartService->getCartDetails();
 
-    #[Route('/cart/get/', name: 'app_get_cart')]
+        return $this->json($cart);
+        
+    }
+    #[Route('/cart/get', name: 'app_get_cart')]
     public function getCart(): Response
     {
-        
-        $cart= $this->cartService->getCartDetails();
+        $cart = $this->cartService->getCartDetails();
+
         return $this->json($cart);
+        
     }
 }
