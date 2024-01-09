@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Address;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Collections;
@@ -54,6 +55,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Products', 'fas fa-list', Product::class);
         yield MenuItem::linkToCrud('Categories', 'fas fa-tag', Category::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
+        yield MenuItem::linkToCrud('Addresses', 'fas fa-address-card', Address::class);
         yield MenuItem::linkToCrud('Pages', 'fas fa-file', Page::class);
         yield MenuItem::linkToCrud('Sliders', 'fas fa-image', Sliders::class);
         yield MenuItem::linkToCrud('Collections', 'fas fa-tshirt', Collections::class);
