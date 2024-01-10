@@ -33,7 +33,7 @@ class WishlistController extends AbstractController
         $this->wishlistService->addToWishList($productId);
         $wishlist= $this->wishlistService->getWishListDetails();
         // dd($wishlist);
-        // return $this ->redirectToRoute("app_wishlist");
+        // return $this ->redirectToRoute("app_wish_list");
 
         return $this->json($wishlist);
     }

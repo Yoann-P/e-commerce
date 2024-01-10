@@ -148,10 +148,10 @@ export const displayCompare = async (compare = null) => {
         "table.compare_table tbody tr.pr_add_to_cart"
       );
       addToCart.innerHTML = "";
-      let romoveFromCart = document.querySelector(
+      let removeFromCart = document.querySelector(
         "table.compare_table tbody tr.pr_remove"
       );
-      romoveFromCart.innerHTML = "";
+      removeFromCart.innerHTML = "";
       compare.forEach((product) => {
         imageContainer.innerHTML += `
                 <td class="row_img">
@@ -176,7 +176,7 @@ export const displayCompare = async (compare = null) => {
                 class="icon-basket-loaded"></i> Add To Cart</a>
                 </td>
                 `;
-        romoveFromCart.innerHTML += `
+        removeFromCart.innerHTML += `
                 <td class="row_remove">
                     <a href="/compare/remove/${product.id}" class="remove_compare_item">
                         <span>Remove</span> <i class="fa fa-times"></i>
