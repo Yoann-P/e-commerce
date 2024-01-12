@@ -465,6 +465,37 @@ endblock %} {% block body %} {%include"page_head/page_head.html.twig" with
 
   const displayAddress = (addresses) => {
     const tbody = document.querySelector(".address_content tbody");
+    if (tbody) {
+      tbody.innerHTML += "";
+      addresses.forEach((address) => {
+        tbody.innerHTML += `
+        <tr>
+                              <td>#${address.id}</td>
+                              <td>
+                                ${address.street} ${address.codePostal}
+                                ${address.city} ${address.state}
+                              </td>
+
+                              <td>
+                                <a
+                                  href="#"
+                                  class="btn btn-fill-out btn-sm edit_address"
+                                  >Edit</a
+                                >
+                              </td>
+                              <td>
+                                <a
+                                  href="#"
+                                  class="btn btn-fill-out btn-sm remove_address"
+                                  >Delete</a
+                                >
+                              </td>
+                            </tr>
+        `;
+      });
+      addform.classList.add("d-none");
+      addressDetails.classList.remove("d-none");
+    }
   };
 
   addAddressButton.addEventListener("click", (event) => {
