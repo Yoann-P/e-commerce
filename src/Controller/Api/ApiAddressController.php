@@ -24,7 +24,7 @@ class ApiAddressController extends AbstractController
         if (!$user) {
             return $this->json([
                 "isSuccess" => false,
-                "messsage" => "You are not authenticated",
+                "message" => "Not authorization !",
                 "data" => []
             ]);
         }
@@ -52,7 +52,123 @@ class ApiAddressController extends AbstractController
 
         return $this->json([
             "isSuccess" => true,
-            "data" => $addresses,
+            "data" => $addresses
+        ]);
+    }
+
+    #[Route('/address/{id}', name: 'app_api_put_address', methods: ['PUT'])]
+    public function update(
+        $id,
+        Request $req,
+        AddressRepository $addressRepository,
+        EntityManagerInterface  $manager,
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json([
+                "isSuccess" => false,
+                "message" => "Not authorization !",
+                "data" => []
+            ]);
+        }
+
+        $address = $addressRepository->findOneById($id);
+
+        if (!$address) {
+            return $this->json([
+                "isSuccess" => false,
+                "message" => "Address not found !",
+                "data" => []
+            ]);
+        }
+
+        if ($user !== $address->getUser()) {
+            return $this->json([
+                "isSuccess" => false,
+                "message" => "Not authorization !",
+                "data" => []
+            ]);
+        }
+
+        // start update 
+        $formData = $req->getPayload();
+        $address->setName($formData->get('name'))
+            ->setClientName($formData->get('client_name'))
+            ->setStreet($formData->get('street'))
+            ->setCodePostal($formData->get('code_postal'))
+            ->setCity($formData->get('city'))
+            ->setState($formData->get('state'));
+
+        $manager->persist($address);
+        $manager->flush();
+
+
+        $addresses = $addressRepository->findByUser($user);
+        foreach ($addresses as $key => $address) {
+            $address->setUser(null);
+            $addresses[$key] = $address;
+        }
+
+
+
+        return $this->json([
+            "isSuccess" => true,
+            "data" => $addresses
+        ]);
+    }
+
+
+
+    #[Route('/address/{id}', name: 'app_api_delete_address', methods: ['DELETE'])]
+    public function delete(
+        $id,
+        Request $req,
+        AddressRepository $addressRepository,
+        EntityManagerInterface  $manager,
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json([
+                "isSuccess" => false,
+                "message" => "Not authorization !",
+                "data" => []
+            ]);
+        }
+
+        $address = $addressRepository->findOneById($id);
+
+        if (!$address) {
+            return $this->json([
+                "isSuccess" => false,
+                "message" => "Address not found !",
+                "data" => []
+            ]);
+        }
+
+        if ($user !== $address->getUser()) {
+            return $this->json([
+                "isSuccess" => false,
+                "message" => "Not authorization !",
+                "data" => []
+            ]);
+        }
+
+        $manager->remove($address);
+        $manager->flush();
+
+        $addresses = $addressRepository->findByUser($user);
+        foreach ($addresses as $key => $address) {
+            $address->setUser(null);
+            $addresses[$key] = $address;
+        }
+
+
+
+        return $this->json([
+            "isSuccess" => true,
+            "data" => $addresses
         ]);
     }
 }
