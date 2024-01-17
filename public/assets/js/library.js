@@ -221,12 +221,13 @@ export const addCartEventListenerToLink = () => {
   });
 };
 export const displayCart = (cart = null) => {
-  console.log(cart);
+  // console.log(cart);
   updateHeaderCart(cart);
   addCartEventListenerToLink();
   if (!cart) {
     return;
   }
+  // console.log(cart);
   let tbody = document.querySelector(".shop_cart_table tbody");
   let cart_sub_total_amount = document.querySelector(".cart_sub_total_amount");
   let cart_shipping_total_amount = document.querySelector(
@@ -293,11 +294,11 @@ export const displayCart = (cart = null) => {
       cart_total_amount.innerHTML = formatPrice(cart.sub_total / 100);
     }
     //marche pas pour le moment remlplacé par formule ci dessus
-    // if (cart_total_amount) {
-    //   cart_total_amount.innerHTML = formatPrice(
-    //     (cart.sub_total + cart.carrier.price) / 100
-    //   );
-    // }
+    if (cart_total_amount) {
+      cart_total_amount.innerHTML = formatPrice(
+        (cart.sub_total + cart.carrier.price) / 100
+      );
+    }
   }
   addCartEventListenerToLink();
 };

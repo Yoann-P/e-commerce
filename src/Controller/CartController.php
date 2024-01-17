@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Carrier;
-use App\Repository\CarrierRepository;
 use App\Services\CartService;
+use App\Repository\CarrierRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,5 +59,27 @@ class CartController extends AbstractController
         $cart = $this->cartService->getCartDetails();
 
         return $this->json($cart);
+    }
+
+    #[Route('/cart/carrier', name: 'app_update_cart_carrier', methods: "POST")]
+    public function updateCartCarrier(Request $req): Response
+    {
+        // dd($id);
+        $id = $req->getPayload()->get('carrierId');
+        $carrier = $this->carrierRepo->findOneById($id);
+
+        if (!$carrier) {
+            return $this->redirectToRoute("app_home");
+        }
+        $this->cartService->update("carrier", [
+            "id" => $carrier->getId(),
+            "name" => $carrier->getName(),
+            "description" => $carrier->getDescription(),
+            "price" => $carrier->getPrice(),
+        ]);
+
+        return $this->redirectToRoute("app_cart");
+
+        // return $this->json($cart);
     }
 }

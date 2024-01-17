@@ -40,22 +40,26 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
             <div class="heading_s1 mb-3">
               <h6>Delivery Choice</h6>
             </div>
-            <form action="">
-              <select name="carrier" id="carrier" class="form-control">
-                {%for carrier in carriers%}
-                <option value="">
+            <form action="/cart/carrier" method="post">
+              <select
+                name="carrierId"
+                value="{{ cart.carrier.id }}"
+                id="carrier"
+                class="form-control"
+              >
+                {%for carrier in carriers%} {%if carrier.id == cart.carrier.id%}
+                <option value="{{ carrier.id }}" selected>
                   {{ carrier.name }} - ({{(carrier.price/100) | format_currency("EUR")
-
-
-
-
-
-
-
                   }})
                 </option>
-                {%endfor%}
+                {% else %}
+                <option value="{{ carrier.id }}">
+                  {{ carrier.name }} - ({{(carrier.price/100) | format_currency("EUR")
+                  }})
+                </option>
+                {%endif%} {%endfor%}
               </select>
+              <button class="btn btn-fill-out mt-1">Update Carrier</button>
             </form>
           </div>
         </div>
@@ -69,11 +73,11 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
                 <tbody>
                   <tr>
                     <td class="cart_total_label">Cart Subtotal</td>
-                    <td class="cart_total_amount"></td>
+                    <td class="cart_sub_total_amount"></td>
                   </tr>
                   <tr>
                     <td class="cart_total_label">Shipping</td>
-                    <td class="cart_carrier_total_amount">Free Shipping</td>
+                    <td class="cart_shipping_total_amount">Free Shipping</td>
                   </tr>
                   <tr>
                     <td class="cart_total_label">Total</td>

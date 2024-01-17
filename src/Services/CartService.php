@@ -1,67 +1,72 @@
 <?php
 
-namespace App\Services; 
+namespace App\Services;
 
+use App\Repository\CarrierRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class CartService 
+class CartService
 {
 
-    public function __construct( private RequestStack $requestStack, private ProductRepository $productRepo,)
+    public function __construct(private RequestStack $requestStack, private ProductRepository $productRepo, private CarrierRepository $carrierRepo)
     {
-        $this->session= $requestStack->getsession();
-        $this->productRepo= $productRepo;
+        $this->session = $requestStack->getsession();
+        $this->productRepo = $productRepo;
     }
 
-    public function getCart()
+    public function get($key)
     {
-        return $this->session->get("cart", []);
+        return $this->session->get($key, []);
     }
 
-    public function updateCart($cart)
+    public function update($key, $cart)
     {
-        return $this->session->set("cart", $cart);
+        return $this->session->set($key, $cart);
     }
 
-    public function addToCart($productId, $count=1)
+    public function addToCart($productId, $count = 1)
     {
-        $cart= $this->getCart();
+        $cart = $this->get('cart');
 
-        if (!empty($cart[$productId])){
+        if (!empty($cart[$productId])) {
             // product existe déjà dans cart
             $cart[$productId] += $count;
-        }else {
+        } else {
             // product n'est pas encore dans cart
             $cart[$productId] = $count;
         }
 
-        $this->updateCart($cart);
+        $this->update("cart", $cart);
     }
 
-    public function removeToCart($productId,$count=1)
+    public function removeToCart($productId, $count = 1)
     {
-        $cart = $this->getCart();
-        if(isset($cart[$productId])){
-            if($cart[$productId] <= $count){
+        $cart = $this->get('cart');
+        if (isset($cart[$productId])) {
+            if ($cart[$productId] <= $count) {
                 unset($cart[$productId]);
-            }else{
+            } else {
                 $cart[$productId] -= $count;
             }
 
-            $this->updateCart($cart);
+            $this->update("cart", $cart);
         }
-        
     }
 
     public function clearCart()
     {
-        $this->updateCart([]);
+        $this->update("cart", []);
+    }
+
+    public function updatreCarrier($carrier)
+    {
+        $this->update->set("carrier", $carrier);
     }
 
     public function getCartDetails()
     {
-        $cart = $this->getCart();
+        $cart = $this->get('cart');
         $result = [
             'items' => [],
             'sub_total' => 0,
@@ -70,32 +75,42 @@ class CartService
         $sub_total = 0;
         foreach ($cart as $productId => $quantity) {
             $product = $this->productRepo->find($productId);
-            if($product){
-                $current_sub_total = $product->getSoldePrice()*$quantity;
+            if ($product) {
+                $current_sub_total = $product->getSoldePrice() * $quantity;
                 $sub_total += $current_sub_total;
                 $result['items'][] = [
                     'product' => [
-                        'id'=>$product->getId(),
-                        'name'=>$product->getName(),
-                        'slug'=>$product->getSlug(),
-                        'imageUrls'=>$product->getImageUrls(),
-                        'soldePrice'=>$product->getSoldePrice(),
-                        'regularPrice'=>$product->getRegularPrice(),
+                        'id' => $product->getId(),
+                        'name' => $product->getName(),
+                        'slug' => $product->getSlug(),
+                        'imageUrls' => $product->getImageUrls(),
+                        'soldePrice' => $product->getSoldePrice(),
+                        'regularPrice' => $product->getRegularPrice(),
                     ],
                     'quantity' => $quantity,
                     'sub_total' => $current_sub_total,
                 ];
                 $result['sub_total'] = $sub_total;
                 $result['cart_count'] += $quantity;
-                
-
-            }else{
+            } else {
                 unset($cart[$productId]);
-                $this->updateCart($cart);
+                $this->update("cart", $cart);
             }
         }
-    
+        // dd($this->carrierRepo->findAll()[0]);
+        $carrier = $this->get('carrier');
+        if (!$carrier) {
+            $carrier = $this->carrierRepo->findAll()[0];
+            $carrier = [
+                "id" => $carrier->getId(),
+                "name" => $carrier->getName(),
+                "description" => $carrier->getDescription(),
+                "price" => $carrier->getPrice(),
+            ];
+            $carrier = $this->update('carrier', $carrier);
+        }
+        $result["carrier"] = $carrier;
+
         return $result;
     }
-    
 }
