@@ -70,6 +70,8 @@ window.onload = () => {
       if (result.isSuccess) {
         const { data } = result;
         displayCart(data);
+
+        // console.log(result)
       }
     }
     console.log({ id });

@@ -159,11 +159,11 @@
                   </tr>
                   <tr>
                     <th>Shipping</th>
-                    <td>Free Shipping</td>
+                    <td>{{ (cart.carrier.price / 100)  | format_currency ('EUR')}}</td>
                   </tr>
                   <tr>
                     <th>Total</th>
-                    <td class="product-subtotal">{{(cart.sub_total / 100)  | format_currency ('EUR')}}<//td>
+                    <td class="product-subtotal">{{(cart.sub_total_with_carrier / 100)  | format_currency ('EUR')}}<//td>
                   </tr>
                 </tfoot>
               </table>
@@ -172,7 +172,7 @@
               
             </div>
             <a href="#" class="btn btn-fill-out btn-block"
-              >Pay now ({{(cart.sub_total / 100)  | format_currency ('EUR')}})</a
+              >Pay now ({{(cart.sub_total_with_carrier / 100)  | format_currency ('EUR')}})</a
             >
           </div>
         </div>

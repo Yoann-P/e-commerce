@@ -1,9 +1,11 @@
-{% extends 'base.html.twig' %} {% block title %}E-commerce | Shopping Cart {%
+{% extends 'base.html.twig' %} {% block title %}Jstore | Shopping Cart {%
 endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
 {'page_name': 'Cart'} %}
-<!-- {{ dump(cart) }}
-{{ dump(cart_json) }} -->
-<div class="main_content cart_content" data-cart="{{ cart_json }}">
+<div
+  class="main_content cart_content"
+  data-cart="{{ cart_json }}"
+  data-carriers="{{ carriers_json }}"
+>
   <div class="section">
     <div class="container">
       <div class="row">
@@ -36,9 +38,9 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="border p-3 p-md-4">
+          <div class="border p-3 p-md-4 carrier_form">
             <div class="heading_s1 mb-3">
-              <h6>Delivery Choice</h6>
+              <h6>Choose your carrier</h6>
             </div>
             <form action="/cart/carrier" method="post">
               <select
@@ -46,20 +48,7 @@ endblock %} {% block body %} {% include "page_head/page_head.html.twig" with
                 value="{{ cart.carrier.id }}"
                 id="carrier"
                 class="form-control"
-              >
-                {%for carrier in carriers%} {%if carrier.id == cart.carrier.id%}
-                <option value="{{ carrier.id }}" selected>
-                  {{ carrier.name }} - ({{(carrier.price/100) | format_currency("EUR")
-                  }})
-                </option>
-                {% else %}
-                <option value="{{ carrier.id }}">
-                  {{ carrier.name }} - ({{(carrier.price/100) | format_currency("EUR")
-                  }})
-                </option>
-                {%endif%} {%endfor%}
-              </select>
-              <button class="btn btn-fill-out mt-1">Update Carrier</button>
+              ></select>
             </form>
           </div>
         </div>

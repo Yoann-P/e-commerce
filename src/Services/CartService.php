@@ -110,6 +110,7 @@ class CartService
             $carrier = $this->update('carrier', $carrier);
         }
         $result["carrier"] = $carrier;
+        $result['sub_total_with_carrier'] = $result["sub_total"] + $carrier["price"];
 
         return $result;
     }

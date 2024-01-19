@@ -25,7 +25,18 @@ class CartController extends AbstractController
     {
         $cart = $this->cartService->getCartDetails();
         $carriers = $this->carrierRepo->findAll();
+
+        foreach ($carriers as $key => $carrier) {
+            $carriers[$key] = [
+                "id" => $carrier->getId(),
+                "name" => $carrier->getName(),
+                "description" => $carrier->getDescription(),
+                "price" => $carrier->getPrice(),
+            ];
+        }
+
         $cart_json = json_encode($cart);
+        $carriers_json = json_encode($carriers);
 
         //return $this->json($cart);
 
@@ -33,7 +44,8 @@ class CartController extends AbstractController
             'controller_name' => 'CartController',
             'cart' => $cart,
             'carriers' => $carriers,
-            'cart_json' => $cart_json
+            'cart_json' => $cart_json,
+            'carriers_json' => $carriers_json,
         ]);
     }
 
@@ -79,7 +91,5 @@ class CartController extends AbstractController
         ]);
 
         return $this->redirectToRoute("app_cart");
-
-        // return $this->json($cart);
     }
 }
