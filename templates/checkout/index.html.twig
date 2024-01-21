@@ -122,10 +122,38 @@
         <div class="col-md-6">
             <div class="heading_s1">
                 <h4>Billing Address</h4>
+                <select name="billing_address"class="form-control">
+                  <option value="">--- Choose billing address --- </option>
+                  {%for address in addresses%}
+                  <option>
+                    {{address.clientName}}
+                    ({{address.street}}
+                    {{address.codePostal}}
+                    {{address.city}}
+                    {{address.state}})
+                  </option>                  
+                  {%endfor%}
+                </select>
             </div>
             <div class="heading_s1">
                 <h4>Shipping Address</h4>
+                <select name="shipping_address"class="form-control">
+                  <option value="">--- Choose shipping address --- </option>
+                  {%for address in addresses%}
+                  <option>
+                    {{address.clientName}}
+                    ({{address.street}}
+                    {{address.codePostal}}
+                    {{address.city}}
+                    {{address.state}})
+                  </option>                  
+                  {%endfor%}
+                </select>
             </div>
+            <div class="heading_s1">
+              <h4>Comments </h4>
+              <textarea class="form-control" name="Comments" id="" cols="30" rows="8"></textarea>
+          </div>
          
         </div>
         <div class="col-md-6">
@@ -145,10 +173,18 @@
                   {%for item in cart.items%}
                   <tr>
                     <td>
+                      <img
+                            src="../assets/images/products/{{
+                              item.product.imageUrls[0]
+                            }}"
+                            width="40"
+                            alt=""
+                          />
                       {{item.product.name}} 
                       <span class="product-qty">{{item.quantity}}</span>
+                      <span class="product-price">x {{(item.product.soldePrice / 100)  | format_currency ('EUR')}}</span>
                     </td>
-                    <td>{{(item.product.soldePrice / 100)  | format_currency ('EUR')}}</td>
+                    <td>{{(item.product.soldePrice * item.quantity / 100)  | format_currency ('EUR')}}</td>
                   </tr>
                   {%endfor%}
                 </tbody>
@@ -171,9 +207,12 @@
             <div class="payment_method">
               
             </div>
-            <a href="#" class="btn btn-fill-out btn-block"
+            <div class="payment-button d-none"><a href="#" class="btn btn-fill-out btn-block"
               >Pay now ({{(cart.sub_total_with_carrier / 100)  | format_currency ('EUR')}})</a
-            >
+              >
+            </div>
+              
+              
           </div>
         </div>
       </div>
@@ -181,3 +220,43 @@
   </div>
 </div>
 {% endblock %}
+{% block javascripts %} 
+<script>
+  // const addresses = document.querySelectorAll('select')
+  // console.log({addresses})
+let billing_address =""
+let shipping_address =""
+let comment = ""
+let displayPayBtn = false
+
+const billing_address_select = document.querySelector('select[name="billing_address"]');
+const shipping_address_select = document.querySelector('select[name="shipping_address"]');
+const comments_textarea = document.querySelector('textarea')
+const payBtn = document.querySelector('.payment-button')
+
+const updateButton = () => {
+  displayPayBtn = (!!billing_address )&& (!!shipping_address);
+  // console.log({billing_address_select, shipping_address_select, comment})
+  // console.log({ displayPayBtn });
+  displayPayBtn ? payBtn.classList.remove("d-none") : payBtn.classList.add("d-none")
+};
+
+billing_address_select.onchange = (event) => {
+  billing_address = event.target.value;
+  updateButton();
+};
+
+shipping_address_select.onchange = (event) => {
+  shipping_address = event.target.value;
+  updateButton();
+};
+
+comments_textarea.onchange = (event) => {
+    comment = event.target.value
+    updateButton()
+}
+
+
+</script>
+{% endblock %}
+

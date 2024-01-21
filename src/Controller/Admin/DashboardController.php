@@ -7,6 +7,7 @@ use App\Entity\Carrier;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Collections;
+use App\Entity\Order;
 use App\Entity\Page;
 use App\Entity\Product;
 use App\Entity\Setting;
@@ -59,6 +60,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Addresses', 'fas fa-address-card', Address::class);
         yield MenuItem::linkToCrud('Pages', 'fas fa-file', Page::class);
         yield MenuItem::linkToCrud('Sliders', 'fas fa-image', Sliders::class);
+        yield MenuItem::linkToCrud('Orders', 'fas fa-shopping-cart', Order::class);
         yield MenuItem::linkToCrud('Carriers', 'fas fa-car', Carrier::class);
         yield MenuItem::linkToCrud('Collections', 'fas fa-tshirt', Collections::class);
         yield MenuItem::linkToCrud('Settings', 'fas fa-gear', Setting::class);
