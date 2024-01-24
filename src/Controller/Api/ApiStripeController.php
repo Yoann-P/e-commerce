@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Repository\OrderRepository;
 use Stripe\StripeClient;
 use App\Services\StripeService;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,21 +12,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiStripeController extends AbstractController
 {
-    #[Route('/api/stripe/payment-intent', name: 'app_stripe_payment-intent', methods: ['POST'])]
+    #[Route('/api/stripe/payment-intent/{orderId}', name: 'app_stripe_payment-intent', methods: ['POST'])]
     public function index(
+        $orderId,
         StripeService $stripeService,
         Request $req,
+        OrderRepository $orderRepo,
     ): Response {
 
         try {
 
             $stripeSecretKey = $stripeService->getPrivateKey();
-            $items = $req->getPayload()->get("items");
-            // dd($items);
+            $order = $orderRepo->findOneById($orderId);
+            if (!$order) {
+                return $this->json(['error' => "Order not found"]);
+            }
+
             $stripe = new StripeClient($stripeSecretKey);
 
             $paymentIntent = $stripe->paymentIntents->create([
-                'amount' => $this->calculateOrderAmount($items),
+                'amount' => $order->getOrderCostTtc(),
                 'currency' => 'eur',
                 // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
                 'automatic_payment_methods' => [

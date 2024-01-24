@@ -16,7 +16,7 @@ class OrderDetails
     #[ORM\Column(length: 255)]
     private ?string $product_name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 2550)]
     private ?string $product_description = null;
 
     #[ORM\Column]

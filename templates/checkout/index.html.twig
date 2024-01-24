@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %} {% block title %}E-commerce Checkout!{% endblock
 %} {% block body %} {% include "page_head/page_head.html.twig" with
 {'page_name': 'Checkout'} %}
-<!-- {%block stylesheets%}
+ <!-- {%block stylesheets%}
 <script src="https://js.stripe.com/v3/"></script>
-{%endblock%} -->
+{%endblock%}  -->
 <div class="main_content"
 data-cart="{{cart_json}}"
-data-public_key = "{{public_key}}">
+data-public_key = "{{public_key}}"
+data-orderid="{{orderId}}">
   <div class="section">
     <div class="container">
       <div class="row">
@@ -228,6 +229,10 @@ data-public_key = "{{public_key}}">
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered ">
     <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> "Secure Payment"</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
       <div class="modal-body">
         <form id="payment-form">
           <div id="payment-element">
@@ -249,6 +254,14 @@ data-public_key = "{{public_key}}">
 <script>
   // const addresses = document.querySelectorAll('select')
   // console.log({addresses})
+
+const main_content = document.querySelector(".main_content")
+const cart = JSON.parse(main_content?.dataset?.cart || [])
+const public_key = main_content?.dataset?.public_key || ""
+const orderId= main_content?.dataset?.orderid || ""
+// console.log({public_key, cart});
+console.log({orderId});  
+
 let billing_address =""
 let shipping_address =""
 let comment = ""
@@ -266,6 +279,9 @@ const updateButton = () => {
   displayPayBtn ? payBtn.classList.remove("d-none") : payBtn.classList.add("d-none")
 };
 
+
+
+
 billing_address_select.onchange = (event) => {
   billing_address = event.target.value;
   updateButton();
@@ -281,12 +297,16 @@ comments_textarea.onchange = (event) => {
     updateButton()
 }
 
+payBtn.onclick = async() =>{
+  const response = await fetch("/api/order", {
+    method: "POST",
+    body: JSON.stringify({billing_address,shipping_address, orderId})
+  })
+  const result = await response.json()
+  console.log({result})
+}
 
 // STRIPE COMPONENT 
-const main_content = document.querySelector(".main_content")
-const cart = JSON.parse(main_content?.dataset?.cart || [])
-const public_key = main_content?.dataset?.public_key || ""
-// console.log({public_key, cart});
 
 // This is your test publishable API key.
 const stripe = Stripe(public_key);
@@ -305,7 +325,7 @@ document
 
 // Fetches a payment intent and captures the client secret
 async function initialize() {
-  const { clientSecret } = await fetch("/api/stripe/payment-intent", {
+  const { clientSecret } = await fetch("/api/stripe/payment-intent/" + orderId, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({  }),
@@ -329,7 +349,7 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: "http://localhost:4242/checkout.html",
+      return_url: window.location.origin + "/stripe/payment/success",
     },
   });
 
