@@ -59,7 +59,7 @@ class Order
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'myOrder', targetEntity: OrderDetails::class)]
+    #[ORM\OneToMany(mappedBy: 'myOrder', targetEntity: OrderDetails::class, cascade: ["remove"])]
     private Collection $orderDetails;
 
     #[ORM\Column(length: 255, nullable: true)]

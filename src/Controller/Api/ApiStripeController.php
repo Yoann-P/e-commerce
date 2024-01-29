@@ -2,9 +2,10 @@
 
 namespace App\Controller\Api;
 
-use App\Repository\OrderRepository;
 use Stripe\StripeClient;
 use App\Services\StripeService;
+use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,6 +19,7 @@ class ApiStripeController extends AbstractController
         StripeService $stripeService,
         Request $req,
         OrderRepository $orderRepo,
+        EntityManagerInterface $em,
     ): Response {
 
         try {
@@ -43,15 +45,13 @@ class ApiStripeController extends AbstractController
                 'clientSecret' => $paymentIntent->client_secret,
             ];
 
+            $order->setStripeClientSecret($paymentIntent->client_secret);
+            $em->persist($order);
+            $em->flush();
+
             return $this->json($output);
         } catch (\Throwable $th) {
             return $this->json(['error' => $th->getMessage()]);
         }
-    }
-
-    public function calculateOrderAmount($cart)
-    {
-        return 2500;
-        // return $cart->sub_total_with_carrier;
     }
 }

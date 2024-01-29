@@ -44,7 +44,7 @@ class OrderDetails
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    public function __construct(Type $var = null)
+    public function __construct()
     {
         $this->setCreatedAt(new \DateTimeImmutable());
     }
