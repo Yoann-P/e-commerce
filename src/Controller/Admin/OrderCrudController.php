@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
+use App\Entity\OrderDetails;
 use App\Form\OrderDetailsType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -41,7 +42,10 @@ class OrderCrudController extends AbstractCrudController
             TextField::new('billing_address')->hideOnIndex(),
             TextField::new('shipping_address')->hideOnIndex(),
             TextField::new('carrier_name'),
+            TextField::new('paymentMethod'),
             TextField::new('stripeClientSecret')->hideOnIndex(),
+            TextField::new('paypalClientSecret')->hideOnIndex(),
+            TextField::new('productName')->hideOnIndex(),
             IntegerField::new('quantity'),
             BooleanField::new('isPaid'),
             ChoiceField::new('status')->setChoices([
@@ -54,8 +58,9 @@ class OrderCrudController extends AbstractCrudController
             MoneyField::new('order_cost')->setCurrency("EUR"),
             MoneyField::new('taxe')->setCurrency("EUR"),
             MoneyField::new('order_cost_ttc')->setCurrency("EUR"),
-            AssociationField::new('orderDetails', 'Order Details')
-                ->onlyOnDetail(),
+            AssociationField::new('orderDetails', 'order details')
+                ->onlyOnDetail()
+            // CollectionField::new('orderDetails', 'order details')
         ];
     }
 }

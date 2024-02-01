@@ -9,8 +9,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class CartService
 {
 
-    public function __construct(private RequestStack $requestStack, private ProductRepository $productRepo, private CarrierRepository $carrierRepo)
-    {
+    public function __construct(
+        private RequestStack $requestStack,
+        private ProductRepository $productRepo,
+        private CarrierRepository $carrierRepo
+    ) {
         $this->session = $requestStack->getsession();
         $this->productRepo = $productRepo;
     }

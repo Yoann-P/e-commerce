@@ -5,9 +5,10 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\OrderDetails;
 use App\Services\CartService;
+use App\Services\PaypalService;
 use App\Services\StripeService;
-use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,7 @@ class CheckoutController extends AbstractController
     public function index(
         AddressRepository $addressRepository,
         StripeService $stripeService,
-        EntityManagerInterface $em,
+        PaypalService $paypalService,
     ): Response {
 
         $user = $this->getUser();
@@ -54,14 +55,16 @@ class CheckoutController extends AbstractController
 
         $orderId = $this->createOrder($cart);
         // dd($orderId);
-        $publicKey = $stripeService->getPublicKey();
+        $stripe_public_Key = $stripeService->getPublicKey();
+        $paypal_public_Key = $paypalService->getPublicKey();
 
         return $this->render('checkout/index.html.twig', [
             'controller_name' => 'CheckoutController',
             'cart' => $cart,
             'orderId' => $orderId,
             'cart_json' => $cart_json,
-            'public_key' => $publicKey,
+            'stripe_public_Key' => $stripe_public_Key,
+            'paypal_public_Key' => $paypal_public_Key,
             'addresses' => $addresses,
         ]);
     }
@@ -85,9 +88,22 @@ class CheckoutController extends AbstractController
         $this->cartService->update('cart', []);
         // dd($order);
         $order->setIsPaid(true);
-
+        $order->setPaymentMethod('STRIPE');
         $em->persist($order);
         $em->flush();
+
+        return $this->render('payment/index.html.twig', [
+            'controller_name' => 'PaymentController',
+
+        ]);
+    }
+
+    #[Route('/paypal/payment/success', name: 'app_paypal_payment_success')]
+    public function paypalPaymentSuccess(
+        Request $req,
+        EntityManagerInterface $em,
+        OrderRepository $orderRepo
+    ) {
 
         return $this->render('payment/index.html.twig', [
             'controller_name' => 'PaymentController',

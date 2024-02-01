@@ -20,7 +20,7 @@ class StripeService
             return $config->getTestPublicApiKey();
         } else {
             // production
-            return $config->getTestPublicApiKey();
+            return $config->getProdPublicApiKey();
         };
     }
     public function getPrivateKey()
@@ -31,7 +31,7 @@ class StripeService
             return $config->getTestPrivateApiKey();
         } else {
             // production
-            return $config->getTestPrivateApiKey();
+            return $config->getProdPrivateApiKey();
         };
     }
 }
